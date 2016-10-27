@@ -12,6 +12,7 @@ import com.atlassian.plugin.spring.scanner.annotation.imports.ComponentImport;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -38,7 +39,11 @@ public class ExampleMacro implements Macro {
 
         StringBuilder builder = new StringBuilder();
         builder.append("<table><tr><th>PageId</th><th>PageTitle</th><th>Number of versions</th></tr>");
-        Collections.sort(pageList, (new PageComparator()));
+        Collections.sort(pageList, new Comparator<Page>() {
+            public int compare(Page p1, Page p2) {
+                return Integer.compare(p2.getVersion(), p1.getVersion());
+            }
+        });
         for (Page p : pageList){
             builder.append("<tr>");
             builder.append("<td>"+
